@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { db } from "@/lib/db";
+import { json } from "stream/consumers";
 
 type GetParams = Promise<{ formId: string }>;
 export const GET = async function (
@@ -11,10 +11,9 @@ export const GET = async function (
     const { formId } = await params;
 
     if (!formId) {
-      return NextResponse.json(
-        { message: "Form ID is required" },
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ message: "Form ID is required" }), {
+        status: 400,
+      });
     }
 
     const form = await db.form.findUnique({
@@ -27,14 +26,16 @@ export const GET = async function (
     });
 
     if (!form) {
-      return NextResponse.json({ message: "Form not found" }, { status: 404 });
+      return new Response(JSON.stringify({ message: "Form not found" }), {
+        status: 404,
+      });
     }
 
-    return NextResponse.json(form);
+    return new Response(JSON.stringify(form), { status: 200 });
   } catch (error: any) {
     console.error("Error fetching form:", error);
-    return NextResponse.json(
-      { message: error.message || "Failed to fetch form" },
+    return new Response(
+      JSON.stringify({ message: error.message || "Failed to fetch form" }),
       { status: 500 }
     );
   }
