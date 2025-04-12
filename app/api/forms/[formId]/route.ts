@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { db } from "@/lib/db";
 
-
 type GetParams = Promise<{ formId: string }>;
-export async function GET(
+export const GET = async function (
   request: Request,
   { params }: { params: { formId: string } }
 ) {
   try {
-    const {formId} =await params;
+    const { formId } = await params;
 
     if (!formId) {
       return NextResponse.json(
@@ -39,4 +38,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+};
