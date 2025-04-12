@@ -5,7 +5,7 @@ import { json } from "stream/consumers";
 type GetParams = Promise<{ formId: string }>;
 export const GET = async function (
   request: Request,
-  { params }: { params: { formId: string } }
+  { params }: { params: GetParams }
 ) {
   try {
     const { formId } = await params;
